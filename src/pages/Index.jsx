@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Box, Button, Container, Flex, Heading, Input, Text, Textarea, VStack } from '@chakra-ui/react';
+import { Box, Button, Container, Flex, Heading, Text, Textarea, VStack } from '@chakra-ui/react';
+import { create } from '../../lib/openai';
 import { FaPaperPlane } from 'react-icons/fa';
 
 const Index = () => {
@@ -7,13 +8,20 @@ const Index = () => {
   const [reviewProgress, setReviewProgress] = useState('');
   const [feedback, setFeedback] = useState('');
 
-  const handleSubmit = () => {
-    // Placeholder for code submission logic
+  const handleSubmit = async () => {
     setReviewProgress('Review in progress...');
-    setTimeout(() => {
+    try {
+      const response = await create({
+        messages: [{ role: 'user', content: `Please review the following code:\n\n${code}` }],
+        model: 'gpt-3.5-turbo'
+      });
       setReviewProgress('');
-      setFeedback('Code review completed. No issues found.');
-    }, 2000);
+      setFeedback(response.choices[0].message.content);
+    } catch (error) {
+      setReviewProgress('');
+      setFeedback('An error occurred while processing your request.');
+      console.error(error);
+    }
   };
 
   return (
