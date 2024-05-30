@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Box, Button, Container, Flex, Heading, Text, Textarea, VStack } from '@chakra-ui/react';
 import { create } from '../../lib/openai';
 import { FaPaperPlane } from 'react-icons/fa';
@@ -7,6 +8,8 @@ const Index = () => {
   const [code, setCode] = useState('');
   const [reviewProgress, setReviewProgress] = useState('');
   const [feedback, setFeedback] = useState('');
+
+  const navigate = useNavigate();
 
   const handleSubmit = async () => {
     setReviewProgress('Review in progress...');
@@ -31,6 +34,9 @@ const Index = () => {
         <Text fontSize="lg" mb={6} textAlign="center">
           Welcome to CodeAgentWeb! Submit your code for automated review and receive feedback.
         </Text>
+      <Button colorScheme="teal" onClick={() => navigate('/api-settings')}>
+          API Settings
+        </Button>
       </Flex>
       <Box bg="gray.100" p={10} borderRadius="md" boxShadow="md">
         <VStack spacing={5}>
